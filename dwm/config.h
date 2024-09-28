@@ -8,8 +8,8 @@ static const char *downvol[]    = { "/usr/bin/pactl",   "set-sink-volume", "0", 
 static const char *mutevol[]    = { "/usr/bin/pactl",   "set-sink-mute",   "0",      "toggle",   NULL };
 
 //brightness
-static const char *light_up[]   = { "/usr/bin/light",   "-A", "5", NULL };
-static const char *light_down[] = { "/usr/bin/light",   "-U", "5", NULL };
+static const char *light_up[]   = { "/usr/bin/brightnessctl",   "s", "+10%", NULL };
+static const char *light_down[] = { "/usr/bin/brightnessctl",   "s", "10%-", NULL };
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
