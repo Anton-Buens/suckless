@@ -1,13 +1,13 @@
 #include <X11/XF86keysym.h>
+#include "colorscheme.h"
 
-//audio
-//
+// audio
 // pipewire
 static const char *upvol[]      = { "/usr/bin/pactl",   "set-sink-volume", "0",      "+5%",      NULL };
 static const char *downvol[]    = { "/usr/bin/pactl",   "set-sink-volume", "0",      "-5%",      NULL };
 static const char *mutevol[]    = { "/usr/bin/pactl",   "set-sink-mute",   "0",      "toggle",   NULL };
 
-//brightness
+// brightness
 static const char *light_up[]   = { "/usr/bin/brightnessctl",   "s", "+10%", NULL };
 static const char *light_down[] = { "/usr/bin/brightnessctl",   "s", "10%-", NULL };
 
@@ -17,30 +17,20 @@ static const unsigned int gappx     = 10;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int vertpad            = 10;       /* vertical padding of bar */
-static const int sidepad            = 10;       /* horizontal padding of bar */
+static const int vertpad            = 0;       /* vertical padding of bar */
+static const int sidepad            = 0;       /* horizontal padding of bar */
 static const char *fonts[]          = { "monospace:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
 
-// Colors
-static const char col_white[]       = "#fdf5f5";
-static const char col_pink[]	    = "#ecbcbc";
-static const char col_Dblue[]       = "#11133d";
-static const char col_purple[]      = "#654179";
-
-static const char col_gray1[]       = "#10153e";
-// static const char col_gray2[]       = "#444444";
-// static const char col_gray3[]       = "#bbbbbb";
-// static const char col_gray4[]       = "#eeeeee";
-// static const char col_cyan[]        = "#005577";
-static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_white, col_gray1, col_purple },
-	[SchemeSel]  = { col_Dblue , col_pink, col_pink  },
-};
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5" };
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7" };
+ 
+static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
+static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
+static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
+
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -78,8 +68,8 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_white, "-sb", col_pink, "-sf", col_purple, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", color4, "-nf", color1, "-sb", color8, "-sf", color9, NULL };
+static const char *termcmd[]  = { "kitty", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -108,11 +98,11 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 
 	// Audio + Brightness
-	{ 0,                       XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
-	{ 0,                       XF86XK_AudioMute, spawn, {.v = mutevol } },
-	{ 0,                       XF86XK_AudioRaiseVolume, spawn, {.v = upvol   } },
-	{ 0,				XF86XK_MonBrightnessUp,		spawn,	{.v = light_up} },
-	{ 0,				XF86XK_MonBrightnessDown,	spawn,	{.v = light_down} },
+	{ 0,                       	XF86XK_AudioLowerVolume, 	spawn, 		{.v = downvol } },
+	{ 0,                       	XF86XK_AudioMute, 		spawn,		{.v = mutevol } },
+	{ 0,                       	XF86XK_AudioRaiseVolume, 	spawn, 		{.v = upvol   } },
+	{ 0,				XF86XK_MonBrightnessUp,		spawn,		{.v = light_up} },
+	{ 0,				XF86XK_MonBrightnessDown,	spawn,		{.v = light_down} },
 
 
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
@@ -124,6 +114,8 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_3,                      2)
 	TAGKEYS(                        XK_4,                      3)
 	TAGKEYS(                        XK_5,                      4)
+	TAGKEYS(                        XK_6,                      5)
+	TAGKEYS(                        XK_7,                      6)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
 
